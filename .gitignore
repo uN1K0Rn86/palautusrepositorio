@@ -1,4 +1,2 @@
-viikko1/nhl-statistics-1/.coverage
-viikko1/nhl-statistics-1/src/.coverage
-viikko1/nhl-statistics-1/src/tests/__pycache__/
-viikko1/nhl-statistics-1/src/__pycache__/
+**/.coverage
+**/__pycache__/
