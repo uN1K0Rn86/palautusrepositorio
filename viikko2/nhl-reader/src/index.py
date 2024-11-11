@@ -12,10 +12,12 @@ def main():
         if player.nationality == "FIN":
             fin_players.append(player)
 
+    fin_players.sort(key=lambda player: player.goals+player.assists, reverse=True)
+
     print("Players from FIN:\n")
 
     for player in fin_players:
-        print(f"{player.name} team {player.team} goals {player.goals} assists {player.assists}")
+        print(player)
 
 if __name__ == "__main__":
     main()
