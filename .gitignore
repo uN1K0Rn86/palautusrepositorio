@@ -1,2 +1,6 @@
 **/.coverage
 **/__pycache__/
+**/geckodriver*
+**/output.xml
+**/log.html
+**/report.html
