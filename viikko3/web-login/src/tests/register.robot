@@ -48,6 +48,18 @@ Register With Username That Is Already In Use
     Submit Credentials
     Page Should Contain  User with username kalle already exists
 
+Login After Successful Registration
+    Set Username  mandible
+    Set Password  cal1gula
+    Set Password Confirmation  cal1gula
+    Submit Credentials
+    Click Link  Continue to main page
+    Click Button  Logout
+    Set Username  mandible
+    Set Password  cal1gula
+    Click Button  Login
+    Main Page Should Be Open
+
 *** Keywords ***
 
 Register Should Succeed
