@@ -28,14 +28,25 @@ Register With Valid Username And Too Short Password
     Page Should Contain  Password must be at least 8 characters long and cannot contain only letters
 
 Register With Valid Username And Invalid Password
-# salasana ei sisällä halutunlaisia merkkejä
-# ...
+    Set Username  korn
+    Set Password  kornyolo
+    Set Password Confirmation  kornyolo
+    Submit Credentials
+    Page Should Contain  Password must be at least 8 characters long and cannot contain only letters
 
 Register With Nonmatching Password And Password Confirmation
-# ...
+    Set Username  kornyo
+    Set Password  kornyo99
+    Set Password Confirmation  kornyo98
+    Submit Credentials
+    Page Should Contain  Password and confirmation do not match
 
 Register With Username That Is Already In Use
-#
+    Set Username  kalle
+    Set Password  moro9999
+    Set Password Confirmation  moro9999
+    Submit Credentials
+    Page Should Contain  User with username kalle already exists
 
 *** Keywords ***
 
