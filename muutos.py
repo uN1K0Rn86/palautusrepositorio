@@ -1,2 +1,2 @@
 def change(x):
-    pass
+    return 2*x
