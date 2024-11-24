@@ -230,3 +230,32 @@ class TestKauppa(unittest.TestCase):
         kauppa.tilimaksu("sami", "80085")
         self.pankki_mock.tilisiirto.assert_called_with("sami", 3, "80085", "33333-44455", 9)
         
+    def test_poista_korista(self):
+        self.viitegeneraattori_mock.uusi.return_value = 99
+
+        # tehdään toteutus saldo-metodille
+        def varasto_saldo(tuote_id):
+            if tuote_id == 1:
+                return 5
+            if tuote_id == 3:
+                return 15
+
+        # tehdään toteutus hae_tuote-metodille
+        def varasto_hae_tuote(tuote_id):
+            if tuote_id == 1:
+                return Tuote(1, "maito", 5)
+            if tuote_id == 3:
+                return Tuote(3, "mosaic_ipa", 9)
+
+        # otetaan toteutukset käyttöön
+        self.varasto_mock.saldo.side_effect = varasto_saldo
+        self.varasto_mock.hae_tuote.side_effect = varasto_hae_tuote
+
+        # alustetaan kauppa
+        kauppa = Kauppa(self.varasto_mock, self.pankki_mock, self.viitegeneraattori_mock)
+
+        kauppa.aloita_asiointi()
+        kauppa.lisaa_koriin(1)
+        kauppa.lisaa_koriin(3)
+        kauppa.poista_korista(3)
+        self.assertEqual(kauppa._ostoskori.hinta(), 5)
