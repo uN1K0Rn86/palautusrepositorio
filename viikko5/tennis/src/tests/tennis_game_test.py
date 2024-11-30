@@ -49,8 +49,10 @@ def play_game(p1_points, p2_points):
     for i in range(max(p1_points, p2_points)):
         if i < p1_points:
             game.won_point("player1")
+            print("p1")
         if i < p2_points:
             game.won_point("player2")
+            print("p2")
     return game
 
 

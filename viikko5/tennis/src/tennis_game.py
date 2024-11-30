@@ -2,40 +2,33 @@ class TennisGame:
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
-        self.m_score1 = 0
-        self.m_score2 = 0
+        self.p1_score = 0
+        self.p2_score = 0
 
     def won_point(self, player_name):
         if player_name == "player1":
-            self.m_score1 = self.m_score1 + 1
+            self.p1_score = self.p1_score + 1
         else:
-            self.m_score2 = self.m_score2 + 1
+            self.p2_score = self.p2_score + 1
 
     def get_score(self):
+        win_threshold = 4
         score = ""
         temp_score = 0
 
-        if self.m_score1 == self.m_score2:
-            score = ScoreFactory(self.m_score1, self.m_score2).retrieve()
+        if self.p1_score == self.p2_score:
+            score = ScoreFactory(self).retrieve("even")
 
-        elif self.m_score1 >= 4 or self.m_score2 >= 4:
-            minus_result = self.m_score1 - self. m_score2
+        elif self.p1_score >= win_threshold or self.p2_score >= win_threshold:
+            score = ScoreFactory(self).retrieve("adv")
 
-            if minus_result == 1:
-                score = "Advantage player1"
-            elif minus_result == -1:
-                score = "Advantage player2"
-            elif minus_result >= 2:
-                score = "Win for player1"
-            else:
-                score = "Win for player2"
         else:
             for i in range(1, 3):
                 if i == 1:
-                    temp_score = self.m_score1
+                    temp_score = self.p1_score
                 else:
                     score = score + "-"
-                    temp_score = self.m_score2
+                    temp_score = self.p2_score
 
                 if temp_score == 0:
                     score = score + "Love"
@@ -49,13 +42,16 @@ class TennisGame:
         return score
 
 class ScoreFactory:
-    def __init__(self, p1_score, p2_score):
-        self.p1_score = p1_score
-        self.p2_score = p2_score
+    def __init__(self, game):
+        self.p1_score = game.p1_score
+        self.p2_score = game.p2_score
+        self.win_threshold = 4
 
-    def retrieve(self):
-        if self.p1_score == self.p2_score:
+    def retrieve(self, prev_score):
+        if prev_score == "even":
             return Even(self.p1_score).deliver()
+        elif self.p1_score >= self.win_threshold or self.p2_score >= self.win_threshold:
+            return Advantage(self.p1_score, self.p2_score).deliver()
         
 class Even:
     def __init__(self, p1_score):
@@ -69,7 +65,20 @@ class Even:
 
     def deliver(self):
         if self.p1_score in self.scores:
-            print(self.scores[self.p1_score])
             return self.scores[self.p1_score]
         else:
             return "Deuce"
+        
+class Advantage:
+    def __init__(self, p1_score, p2_score):
+        self.adv = p1_score - p2_score
+
+    def deliver(self):
+        if self.adv == 1:
+            return "Advantage player1"
+        elif self.adv == -1:
+            return "Advantage player2"
+        elif self.adv >= 2:
+            return "Win for player1"
+        else: 
+            return "Win for player2"
