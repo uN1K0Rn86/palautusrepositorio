@@ -12,34 +12,7 @@ class TennisGame:
             self.p2_score = self.p2_score + 1
 
     def get_score(self):
-        win_threshold = 4
-        score = ""
-        temp_score = 0
-
-        if self.p1_score == self.p2_score:
-            score = ScoreFactory(self).retrieve("even")
-
-        elif self.p1_score >= win_threshold or self.p2_score >= win_threshold:
-            score = ScoreFactory(self).retrieve("adv")
-
-        else:
-            for i in range(1, 3):
-                if i == 1:
-                    temp_score = self.p1_score
-                else:
-                    score = score + "-"
-                    temp_score = self.p2_score
-
-                if temp_score == 0:
-                    score = score + "Love"
-                elif temp_score == 1:
-                    score = score + "Fifteen"
-                elif temp_score == 2:
-                    score = score + "Thirty"
-                elif temp_score == 3:
-                    score = score + "Forty"
-
-        return score
+        return ScoreFactory(self).retrieve()
 
 class ScoreFactory:
     def __init__(self, game):
@@ -47,11 +20,15 @@ class ScoreFactory:
         self.p2_score = game.p2_score
         self.win_threshold = 4
 
-    def retrieve(self, prev_score):
-        if prev_score == "even":
+    def retrieve(self):
+        if self.p1_score == self.p2_score:
             return Even(self.p1_score).deliver()
+
         elif self.p1_score >= self.win_threshold or self.p2_score >= self.win_threshold:
             return Advantage(self.p1_score, self.p2_score).deliver()
+
+        else:
+            return InProgress(self.p1_score, self.p2_score).deliver()
         
 class Even:
     def __init__(self, p1_score):
@@ -82,3 +59,18 @@ class Advantage:
             return "Win for player1"
         else: 
             return "Win for player2"
+        
+class InProgress:
+    def __init__(self, p1_score, p2_score):
+        self.p1_score = p1_score
+        self.p2_score = p2_score
+
+        self.scores = {
+            0: "Love",
+            1: "Fifteen",
+            2: "Thirty",
+            3: "Forty"
+        }
+
+    def deliver(self):
+        return f"{self.scores[self.p1_score]}-{self.scores[self.p2_score]}"
