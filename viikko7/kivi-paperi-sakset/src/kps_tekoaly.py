@@ -1,5 +1,4 @@
 from kps import KiviPaperiSakset
-from tuomari import Tuomari
 from tekoaly import Tekoaly
 
 
