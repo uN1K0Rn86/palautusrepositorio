@@ -1,6 +1,5 @@
 from luo_peli import luo_peli
 
-
 def main():
     while True:
         vastaus = input("Valitse pelataanko"
